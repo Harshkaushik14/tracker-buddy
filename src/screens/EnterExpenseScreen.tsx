@@ -7,18 +7,79 @@ import {
   TouchableOpacity,
   Alert,
   SafeAreaView,
+  StatusBar,
+  FlatList,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
 import {addExpense} from '../redux/store/action';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DatePicker from 'react-native-date-picker';
 import {formatDate} from '../utils/functions';
+import {getGreeting} from '../utils/constatns';
+import LinearGradient from 'react-native-linear-gradient';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
+import AnimatedText from '../components/AnimatedCounter';
+import AnimatedCounter from '../components/AnimatedCounter';
 
 interface Expense {
   date: Date;
   value: string;
   amount: number;
 }
+
+const data = [
+  {
+    id: '1',
+    title: 'Upwork',
+    date: 'Today',
+    amount: '- $850.00',
+    icon: 'bug',
+  },
+  {
+    id: '2',
+    title: 'Freelance',
+    date: 'Yesterday',
+    amount: '- $300.00',
+    icon: 'briefcase',
+  },
+  {
+    id: '3',
+    title: 'Salary',
+    date: 'Last Week',
+    amount: '+ $2000.00',
+    icon: 'wallet',
+  },
+  {
+    id: '4',
+    title: 'Salary',
+    date: 'Last Week',
+    amount: '+ $2000.00',
+    icon: 'wallet',
+  },
+  {
+    id: '5',
+    title: 'Salary',
+    date: 'Last Week',
+    amount: '+ $2000.00',
+    icon: 'wallet',
+  },
+  {
+    id: '6',
+    title: 'Salary',
+    date: 'Last Week',
+    amount: '+ $2000.00',
+    icon: 'wallet',
+  },
+  {
+    id: '7',
+    title: 'Salary',
+    date: 'Last Week',
+    amount: '+ $2000.00',
+    icon: 'wallet',
+  },
+];
 
 export default function EnterExpenseScreen() {
   const [openDatePicker, setOpenDatePicker] = useState<boolean>(false);
@@ -49,21 +110,140 @@ export default function EnterExpenseScreen() {
     setValue(null);
   };
 
+  const renderItem = ({item}: {item: (typeof data)[0]}) => (
+    <View style={styles.listItem}>
+      <View style={{flexDirection: 'row'}}>
+        <View style={styles.iconContainer}>
+          <Entypo name={item.icon} size={18} color={'#fff'} />
+        </View>
+        <View style={{left: 10, marginTop: 3}}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.date}>{item.date}</Text>
+        </View>
+      </View>
+      <Text
+        style={[
+          styles.amount,
+          {color: item.amount.startsWith('+') ? '#4CAF50' : '#F95B51'},
+        ]}>
+        {item.amount}
+      </Text>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text
+      <StatusBar
+        animated={true}
+        backgroundColor={'#2A7C76'}
+        barStyle={'light-content'}
+      />
+      <View
         style={{
-          color: '#000',
-          fontSize: 24,
-          fontWeight: 'bold',
-          marginTop: 20,
-          marginBottom: 20,
+          height: '26%',
+          width: '100%',
         }}>
-        Welcome
-      </Text>
+        <LinearGradient
+          colors={['#2A7C76', '#145A58']}
+          style={styles.gradientBox}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <View>
+              <Text style={styles.greeting}>{getGreeting()}</Text>
+              <Text style={[styles.greeting, {fontSize: 20, marginTop: 5}]}>
+                Harsh Kaushik
+              </Text>
+            </View>
 
-      <View>
-        <Text style={{color:"#000"}}>Enter Date:</Text>
+            <MaterialCommunityIcons
+              name="bell-outline"
+              size={24}
+              color={'#fff'}
+              style={{left: -52}}
+            />
+          </View>
+        </LinearGradient>
+
+        <View
+          style={{
+            backgroundColor: '#2F7E79',
+            position: 'absolute',
+            zIndex: 1,
+            padding: 20,
+            width: '90%',
+            left: 20,
+            bottom: -100,
+            height: '90%',
+            borderRadius: 20,
+            elevation: 2,
+          }}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: '#fff',
+                  fontWeight: '400',
+                  textAlign: 'left',
+                }}>
+                Total Expense Today
+              </Text>
+            
+              <AnimatedCounter
+                targetValue={2548}
+                duration={2000}
+                style={{fontSize: 30, color: '#fff'}}
+                prefix="$ "
+                // suffix=".00"
+              />
+            </View>
+
+            <MaterialCommunityIcons
+              name="dots-horizontal"
+              size={24}
+              color={'#fff'}
+            />
+          </View>
+
+          <View
+            style={{marginTop: 50, flexDirection: 'row', alignItems: 'center',justifyContent:"space-between"}}>
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#fff',
+                fontWeight: '400',
+                letterSpacing: 1,
+              }}>
+              XXXX XXXX XXXX 1881
+            </Text>
+
+            <FontAwesome name="cc-visa" color={'#fff'} size={30} />
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.flatContainer}>
+        <View style={{height: '25%'}} />
+        <View style={styles.header}>
+          <Text style={styles.historyText}>History</Text>
+          <Text style={styles.seeAllText}>See all</Text>
+        </View>
+        <FlatList
+          data={data}
+          keyExtractor={item => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContainer}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={<View style={{marginBottom: '20%'}} />}
+        />
+      </View>
+
+      {/* <View style={{marginHorizontal: 20, marginTop: 120}}>
+        <Text style={{color: '#000'}}>Enter Date:</Text>
         <TouchableOpacity
           onPress={() => setOpenDatePicker(true)}
           style={styles.input}>
@@ -83,7 +263,7 @@ export default function EnterExpenseScreen() {
           onCancel={() => setOpenDatePicker(false)}
         />
 
-        <Text style={{color:"#000"}}>Category:</Text>
+        <Text style={{color: '#000'}}>Category:</Text>
         <DropDownPicker
           style={styles.dropdown}
           open={open}
@@ -95,7 +275,7 @@ export default function EnterExpenseScreen() {
           placeholder="Select a category"
         />
 
-        <Text style={{color:"#000"}}>Amount:</Text>
+        <Text style={{color: '#000'}}>Amount:</Text>
         <TextInput
           style={styles.input}
           value={amount}
@@ -109,13 +289,13 @@ export default function EnterExpenseScreen() {
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.submitText}>Add</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, padding: 20, backgroundColor: '#fff'},
+  container: {flex: 1, backgroundColor: '#fff'},
   input: {
     borderWidth: 1,
     borderColor: '#000',
@@ -143,5 +323,68 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  gradientBox: {
+    backgroundColor: '#2A7C76',
+    height: '100%',
+    // width: '100%',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    overflow: 'hidden',
+  },
+  greeting: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginTop: 20,
+    left: 25,
+  },
+  flatContainer: {
+    marginHorizontal: 20,
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  historyText: {
+    color: '#000',
+    fontSize: 14,
+    letterSpacing: 1,
+    fontWeight: 'bold',
+  },
+  seeAllText: {
+    color: '#000',
+    fontSize: 14,
+    letterSpacing: 1,
+    fontWeight: '300',
+  },
+  listContainer: {
+    marginTop: 20,
+  },
+  listItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  iconContainer: {
+    padding: 15,
+    backgroundColor: '#F0F6F5',
+    borderRadius: 8,
+  },
+  title: {
+    color: '#000',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  date: {
+    color: '#000',
+    fontSize: 16,
+    fontWeight: '300',
+  },
+  amount: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
