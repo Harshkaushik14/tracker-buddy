@@ -8,10 +8,25 @@ import EnterExpenseScreen from './src/screens/EnterExpenseScreen';
 import SummaryScreen from './src/screens/SummaryScreen';
 import {PaperProvider} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {TouchableOpacity, View} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const CustomTabBarButton = ({children, onPress}) => (
+    <TouchableOpacity style={{top:-30,justifyContent:"center",alignItems:"center"}} onPress={onPress}>
+      <View
+        style={{
+          width: 70,
+          height: 70,
+          borderRadius: 35,
+          backgroundColor: 'red',
+        }}>
+        {children}
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
     <PaperProvider>
       <Provider store={store}>
@@ -20,7 +35,7 @@ export default function App() {
             <Tab.Navigator>
               <Tab.Screen
                 options={{
-                  headerShown:false,
+                  headerShown: false,
                   tabBarIcon: ({color, size}) => (
                     <Ionicons name="add-circle" size={size} color={color} />
                   ),
@@ -28,9 +43,22 @@ export default function App() {
                 name="Enter Expense"
                 component={EnterExpenseScreen}
               />
+{/* 
               <Tab.Screen
                 options={{
-                  headerShown:false,
+                  headerShown: false,
+                  tabBarLabel:"",
+                  tabBarIcon: ({color, size}) => (
+                    <Ionicons name="add-circle" size={size} color={color} style={{backgroundColor:"blue",}} />
+                  ),
+                  tabBarButton: props => <CustomTabBarButton {...props} />,
+                }}
+                name="Post"
+                component={EnterExpenseScreen}
+              /> */}
+              <Tab.Screen
+                options={{
+                  headerShown: false,
                   tabBarIcon: ({color, size}) => (
                     <Ionicons name="bar-chart" size={size} color={color} />
                   ),
