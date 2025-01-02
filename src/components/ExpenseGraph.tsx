@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
 });
 
-// Reuse the grouping function
+
 const groupExpensesByDate = (data: {amount: number; date: string}[]) => {
   const grouped: {[key: string]: number} = {};
   data.forEach(({amount, date}) => {

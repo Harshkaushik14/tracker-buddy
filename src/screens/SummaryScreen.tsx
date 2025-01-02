@@ -6,6 +6,7 @@ import ExpenseGraph from '../components/ExpenseGraph';
 
 export default function SummaryScreen() {
   const expenses = useSelector((state: any) => state.expenses);
+  console.log(expenses)
 
   if (!expenses || expenses.length === 0) {
     return (
